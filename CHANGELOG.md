@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/seventhlab/github-workflows/compare/v1.0.0...v1.1.0) (2026-04-10)
+
+### ✨ Features
+
+* add PR title conventional commits compliant check ([#5](https://github.com/seventhlab/github-workflows/issues/5)) ([0586b4f](https://github.com/seventhlab/github-workflows/commit/0586b4ffd41b47139438481d94633f761b574513))
+
 ## 1.0.0 (2026-04-10)
 
 ### 🐛 Bug Fixes
