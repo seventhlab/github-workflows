@@ -94,7 +94,7 @@ jobs:
           pnpm test:cdk
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           path: coverage
           name: cdk-coverage.zip
@@ -128,7 +128,7 @@ jobs:
           go test -v ./... -coverprofile=coverage/coverage.out
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           path: coverage
           name: go-coverage.zip
