@@ -15,10 +15,10 @@ on:
         required: false
         default: 24
       go-version:
-        description: 'Version of Go to use. Default is 1.26.1.'
+        description: 'Version of Go to use. Default is 1.26.x.'
         type: string
         required: false
-        default: '1.26.1'
+        default: '1.26.x'
       use-github-npm-registry:
         description: 'Whether to use GitHub npm registry. Default is true.'
         type: boolean
@@ -67,11 +67,6 @@ jobs:
         if: ${{ inputs.use-go }}
         with:
           go-version: ${{ inputs.go-version }}
-
-      - name: Install golangci-lint
-        if: ${{ inputs.use-go }}
-        run: |
-          go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint
 
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
