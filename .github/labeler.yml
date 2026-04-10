@@ -1,0 +1,77 @@
+# Configuration for actions/labeler - https://github.com/actions/labeler
+# Labels pull requests based on changed files and branch names.
+
+feature:
+  - head-branch:
+      - '^feat\/'
+      - '^feature\/'
+
+bug:
+  - head-branch:
+      - '^fix\/'
+      - '^bugfix\/'
+      - '^hotfix\/'
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**/*'
+  - head-branch:
+      - '^docs\/'
+
+ci/cd:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**/*'
+          - '.github/labeler.yml'
+  - head-branch:
+      - '^ci\/'
+
+maintenance:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.gitignore'
+          - '.markdownlint.json'
+          - '.pre-commit-config.yaml'
+          - '.releaserc.json'
+          - 'Makefile'
+          - 'LICENSE'
+  - head-branch:
+      - '^chore\/'
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'pnpm-lock.yaml'
+          - '.pre-commit-config.yaml'
+  - head-branch:
+      - '^deps\/'
+      - '^dependabot\/'
+      - '^renovate\/'
+
+testing:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/tests.yml'
+          - '**/*test*'
+          - '**/*spec*'
+          - 'coverage/**/*'
+  - head-branch:
+      - '^test\/'
+
+performance:
+  - head-branch:
+      - '^perf\/'
+
+refactor:
+  - head-branch:
+      - '^refactor\/'
+
+breaking-change:
+  - head-branch:
+      - '^.+!$'
+  - body-contains:
+      - 'BREAKING CHANGE'
+      - 'BREAKING-CHANGE'

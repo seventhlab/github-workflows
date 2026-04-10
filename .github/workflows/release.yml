@@ -1,0 +1,35 @@
+---
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SEVENTH_LAB_BOT_TOKEN }}
+
+      - name: Setup node
+        uses: seventhlab/github-actions/actions/setup-node@v1.2.0
+
+      - name: Install dependencies
+        run: pnpm ci
+
+      - name: Run semantic-release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.SEVENTH_LAB_BOT_TOKEN }}

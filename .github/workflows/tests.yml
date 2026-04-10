@@ -1,0 +1,162 @@
+---
+name: "Service Tests"
+
+on:
+  workflow_call:
+    inputs:
+      pnpm-version:
+        description: 'Version of pnpm to use. Default is 10.'
+        type: number
+        required: false
+        default: 10
+      node-version:
+        description: 'Version of Node.js to use. Default is 24.'
+        type: number
+        required: false
+        default: 24
+      go-version:
+        description: 'Version of Go to use. Default is 1.26.1.'
+        type: string
+        required: false
+        default: '1.26.1'
+      use-github-npm-registry:
+        description: 'Whether to use GitHub npm registry. Default is true.'
+        type: boolean
+        required: false
+        default: true
+      run-cdk-tests:
+        description: 'Whether to run CDK tests. Default is true.'
+        type: boolean
+        required: false
+        default: true
+      run-go-tests:
+        description: 'Whether to run Go tests. Default is true.'
+        type: boolean
+        required: false
+        default: true
+      cdk-tests-env-vars:
+        description: |
+          Environment variables to set for CDK tests. Should be a JSON object where keys are variable names and values
+          are variable values. Default is {}.
+        type: string
+        required: false
+        default: '{}'
+      go-tests-env-vars:
+        description: |
+          Environment variables to set for Go tests. Should be a JSON object where keys are variable names and values
+          are variable values. Default is {}.
+        type: string
+        required: false
+        default: '{}'
+    secrets:
+      NODE_AUTH_TOKEN:
+        description: 'GitHub npm registry authentication token. Required if `use-github-npm-registry` is true.'
+        required: false
+      SONAR_TOKEN:
+        description: 'SonarQube authentication token. Required for SonarQube scan.'
+        required: true
+
+jobs:
+  cdk-tests:
+    name: "CDK Tests"
+    if: ${{ inputs.run-cdk-tests }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: seventhlab/github-actions/actions/checkout@v1.2.0
+
+      - name: Setup node
+        uses: seventhlab/github-actions/actions/setup-node@v1.2.0
+        with:
+          pnpm-version: ${{ inputs.pnpm-version }}
+          node-version: ${{ inputs.node-version }}
+          use-github-npm-registry: ${{ inputs.use-github-npm-registry }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: Setup Go
+        uses: seventhlab/github-actions/actions/setup-go@v1.2.0
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+          go mod download
+
+      - name: Export CDK tests env vars
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.2.0
+        with:
+          env-vars-json: ${{ inputs.cdk-tests-env-vars }}
+
+      - name: Run tests
+        run: |
+          pnpm test:cdk
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v5
+        with:
+          path: coverage
+          name: cdk-coverage.zip
+          overwrite: true
+
+  go-tests:
+    name: "Go Tests"
+    if: ${{ inputs.run-go-tests }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: seventhlab/github-actions/actions/checkout@v1.2.0
+
+      - name: Setup Go
+        uses: seventhlab/github-actions/actions/setup-go@v1.2.0
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Install dependencies
+        run: |
+          go mod download
+
+      - name: Export Go tests env vars
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.2.0
+        with:
+          env-vars-json: ${{ inputs.go-tests-env-vars }}
+
+      - name: Run tests
+        run: |
+          mkdir -p coverage
+          go test -v ./... -coverprofile=coverage/coverage.out
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v5
+        with:
+          path: coverage
+          name: go-coverage.zip
+          overwrite: true
+
+  sonar:
+    runs-on: ubuntu-latest
+    name: "Sonar"
+    needs: [cdk-tests, go-tests]
+    steps:
+      - name: Checkout
+        uses: seventhlab/github-actions/actions/checkout@v1.2.0
+
+      - name: Download CDK coverage report
+        uses: actions/download-artifact@v6
+        if: ${{ inputs.run-cdk-tests }}
+        with:
+          name: cdk-coverage.zip
+          path: coverage
+
+      - name: Download GO coverage report
+        uses: actions/download-artifact@v6
+        if: ${{ inputs.run-go-tests }}
+        with:
+          name: go-coverage.zip
+          path: coverage
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v7.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
