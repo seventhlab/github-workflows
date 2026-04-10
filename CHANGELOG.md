@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.2](https://github.com/seventhlab/github-workflows/compare/v1.1.1...v1.1.2) (2026-04-10)
+
+### 🔧 Chores
+
+* **ci)(deps:** bump actions/download-artifact from 6 to 8 ([#4](https://github.com/seventhlab/github-workflows/issues/4)) ([f51344a](https://github.com/seventhlab/github-workflows/commit/f51344afeb69326498d7b3b06938d25e17a90f78))
+* **ci)(deps:** bump actions/upload-artifact from 5 to 7 ([#3](https://github.com/seventhlab/github-workflows/issues/3)) ([c3515f4](https://github.com/seventhlab/github-workflows/commit/c3515f44dc7bc78dc187d7a3bc216e2b9dee12c3))
+
 ## [1.1.1](https://github.com/seventhlab/github-workflows/compare/v1.1.0...v1.1.1) (2026-04-10)
 
 ### 🔧 Chores
