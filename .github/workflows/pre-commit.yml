@@ -45,10 +45,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: seventhlab/github-actions/actions/checkout@v1.2.4
+        uses: seventhlab/github-actions/actions/checkout@v1.4.0
 
       - name: Setup node
-        uses: seventhlab/github-actions/actions/setup-node@v1.2.4
+        uses: seventhlab/github-actions/actions/setup-node@v1.4.0
         if: ${{ inputs.use-node }}
         with:
           pnpm-version: ${{ inputs.pnpm-version }}
@@ -63,7 +63,7 @@ jobs:
           pnpm install
 
       - name: Setup Go
-        uses: seventhlab/github-actions/actions/setup-go@v1.2.4
+        uses: seventhlab/github-actions/actions/setup-go@v1.4.0
         if: ${{ inputs.use-go }}
         with:
           go-version: ${{ inputs.go-version }}

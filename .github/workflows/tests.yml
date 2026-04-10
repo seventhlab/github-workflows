@@ -63,10 +63,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: seventhlab/github-actions/actions/checkout@v1.2.4
+        uses: seventhlab/github-actions/actions/checkout@v1.4.0
 
       - name: Setup node
-        uses: seventhlab/github-actions/actions/setup-node@v1.2.4
+        uses: seventhlab/github-actions/actions/setup-node@v1.4.0
         with:
           pnpm-version: ${{ inputs.pnpm-version }}
           node-version: ${{ inputs.node-version }}
@@ -75,7 +75,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
       - name: Setup Go
-        uses: seventhlab/github-actions/actions/setup-go@v1.2.4
+        uses: seventhlab/github-actions/actions/setup-go@v1.4.0
         with:
           go-version: ${{ inputs.go-version }}
 
@@ -85,7 +85,7 @@ jobs:
           go mod download
 
       - name: Export CDK tests env vars
-        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.2.4
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.4.0
         with:
           env-vars-json: ${{ inputs.cdk-tests-env-vars }}
 
@@ -106,10 +106,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: seventhlab/github-actions/actions/checkout@v1.2.4
+        uses: seventhlab/github-actions/actions/checkout@v1.4.0
 
       - name: Setup Go
-        uses: seventhlab/github-actions/actions/setup-go@v1.2.4
+        uses: seventhlab/github-actions/actions/setup-go@v1.4.0
         with:
           go-version: ${{ inputs.go-version }}
 
@@ -118,7 +118,7 @@ jobs:
           go mod download
 
       - name: Export Go tests env vars
-        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.2.4
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.4.0
         with:
           env-vars-json: ${{ inputs.go-tests-env-vars }}
 
@@ -140,7 +140,10 @@ jobs:
     needs: [cdk-tests, go-tests]
     steps:
       - name: Checkout
-        uses: seventhlab/github-actions/actions/checkout@v1.2.4
+        uses: seventhlab/github-actions/actions/checkout@v1.4.0
+        with:
+          # Disabling shallow clones is recommended for improving the relevancy of reporting
+          fetch-depth: 0
 
       - name: Download CDK coverage report
         uses: actions/download-artifact@v8
