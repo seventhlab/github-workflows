@@ -68,5 +68,10 @@ jobs:
         with:
           go-version: ${{ inputs.go-version }}
 
+      - name: Install Go dependencies
+        if: ${{ inputs.use-go }}
+        run: |
+          go mod download
+
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
