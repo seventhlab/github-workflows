@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1](https://github.com/seventhlab/github-workflows/compare/v1.1.0...v1.1.1) (2026-04-10)
+
+### 🔧 Chores
+
+* **pre-commit)(deps:** bump https://github.com/igorshubovych/markdownlint-cli ([#2](https://github.com/seventhlab/github-workflows/issues/2)) ([ae1eb7c](https://github.com/seventhlab/github-workflows/commit/ae1eb7ca90ac280a74400f93de4e11e2240e65a3))
+
 ## [1.1.0](https://github.com/seventhlab/github-workflows/compare/v1.0.0...v1.1.0) (2026-04-10)
 
 ### ✨ Features
