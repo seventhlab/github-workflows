@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.4](https://github.com/seventhlab/github-workflows/compare/v1.1.3...v1.1.4) (2026-04-10)
+
+### 🐛 Bug Fixes
+
+* change the way golangci-lint is installed to avoid go versions issues ([#7](https://github.com/seventhlab/github-workflows/issues/7)) ([b4987bb](https://github.com/seventhlab/github-workflows/commit/b4987bb3abba817dff7538cab9f640b5c7093259))
+
 ## [1.1.3](https://github.com/seventhlab/github-workflows/compare/v1.1.2...v1.1.3) (2026-04-10)
 
 ### 🐛 Bug Fixes
