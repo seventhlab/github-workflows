@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: seventhlab/github-actions/actions/checkout@v1.2.4
+        uses: seventhlab/github-actions/actions/checkout@v1.4.0
 
       - name: Labeler
         uses: actions/labeler@v6
