@@ -20,18 +20,14 @@
   "homepage": "https://github.com/seventhlab/github-workflows#readme",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
-    "conventional-changelog-conventionalcommits": "^7.0.2",
-    "semantic-release": "^23.0.0"
+    "conventional-changelog-conventionalcommits": "^9.3.1",
+    "semantic-release": "^25.0.3"
   },
   "scripts": {
     "semantic-release": "semantic-release",
     "lint": "echo 'Use make lint or pre-commit run --all-files'",
     "test": "echo 'Use make test'"
-  },
-  "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=9.0.0"
   }
 }
