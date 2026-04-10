@@ -143,14 +143,14 @@ jobs:
         uses: seventhlab/github-actions/actions/checkout@v1.2.4
 
       - name: Download CDK coverage report
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         if: ${{ inputs.run-cdk-tests }}
         with:
           name: cdk-coverage.zip
           path: coverage
 
       - name: Download GO coverage report
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         if: ${{ inputs.run-go-tests }}
         with:
           name: go-coverage.zip
