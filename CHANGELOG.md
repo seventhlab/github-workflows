@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.3](https://github.com/seventhlab/github-workflows/compare/v1.1.2...v1.1.3) (2026-04-10)
+
+### 🐛 Bug Fixes
+
+* disable shallow clone for sonar step ([#6](https://github.com/seventhlab/github-workflows/issues/6)) ([0c44a04](https://github.com/seventhlab/github-workflows/commit/0c44a048b921416d9cbc876324b7117f59754ad7))
+
 ## [1.1.2](https://github.com/seventhlab/github-workflows/compare/v1.1.1...v1.1.2) (2026-04-10)
 
 ### 🔧 Chores
