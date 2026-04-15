@@ -1,0 +1,159 @@
+---
+name: "Tests Coverage"
+
+on:
+  workflow_call:
+    inputs:
+      report-cdk-tests-coverage:
+        description: 'Whether to generate CDK tests coverage report. Default is true.'
+        type: boolean
+        required: false
+        default: true
+      report-go-tests-coverage:
+        description: 'Whether to generate Go tests coverage report. Default is true.'
+        type: boolean
+        required: false
+        default: true
+      pnpm-version:
+        description: 'Version of pnpm to use. Default is 10.'
+        type: number
+        required: false
+        default: 10
+      node-version:
+        description: 'Version of Node.js to use. Default is 24.'
+        type: number
+        required: false
+        default: 24
+      go-version:
+        description: 'Version of Go to use. Default is 1.26.1.'
+        type: string
+        required: false
+        default: '1.26.1'
+      use-github-npm-registry:
+        description: 'Whether to use GitHub npm registry. Default is true.'
+        type: boolean
+        required: false
+        default: true
+      vitest-config-path:
+        description: 'Path to Vitest configuration file. Default is vitest.config.ts.'
+        type: string
+        required: false
+        default: 'vitest.config.ts'
+      cdk-tests-env-vars:
+        description: |
+          Environment variables to set for CDK tests. Should be a JSON object where keys are variable names and values
+          are variable values. Default is {}.
+        type: string
+        required: false
+        default: '{}'
+      go-tests-env-vars:
+        description: |
+          Environment variables to set for Go tests. Should be a JSON object where keys are variable names and values
+          are variable values. Default is {}.
+        type: string
+        required: false
+        default: '{}'
+    secrets:
+      NODE_AUTH_TOKEN:
+        description: 'GitHub npm registry authentication token. Required if `use-github-npm-registry` is true.'
+        required: false
+
+permissions:
+  contents: read
+  actions: read
+  packages: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  default-branch:
+    name: Default Branch
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main' }}
+    steps:
+      - name: Is default branch
+        run: |
+          echo -e "\033[0;33mThis workflow is running on the default branch (main)."
+          echo -e "Coverage reports will not be generated for the default branch to avoid"
+          echo -e "unnecessary resource usage and potential security risks of exposing"
+          echo -e "coverage data for the default branch.\033[0m"
+          echo "If you want to generate coverage reports, please create a pull request or push to a non-default branch."
+
+  cdk-tests-coverage-report:
+    name: "CDK Tests Coverage Report"
+    runs-on: ubuntu-latest
+    if: ${{ inputs.report-cdk-tests-coverage && github.ref_name != 'main' }}
+    steps:
+      - name: Checkout
+        uses: seventhlab/github-actions/actions/checkout@v1.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: seventhlab/github-actions/actions/setup-node@v1.4.0
+        with:
+          pnpm-version: ${{ inputs.pnpm-version }}
+          node-version: ${{ inputs.node-version }}
+          use-github-npm-registry: ${{ inputs.use-github-npm-registry }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+
+      - name: Export CDK tests env vars
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.4.0
+        with:
+          env-vars-json: ${{ inputs.cdk-tests-env-vars }}
+
+      - name: Run tests
+        run: |
+          pnpm test:cdk
+
+      - name: Generate coverage report
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          vite-config-path: ${{ inputs.vitest-config-path }}
+
+  go-tests-coverage-report:
+    name: "Go Tests Coverage Report"
+    runs-on: ubuntu-latest
+    if: ${{ inputs.report-go-tests-coverage && github.ref_name != 'main' }}
+    steps:
+      - name: Checkout
+        uses: seventhlab/github-actions/actions/checkout@v1.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: seventhlab/github-actions/actions/setup-go@v1.4.0
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - name: Install dependencies
+        run: |
+          go mod download
+
+      - name: Export Go tests env vars
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.4.0
+        with:
+          env-vars-json: ${{ inputs.go-tests-env-vars }}
+
+      - name: Run tests
+        run: |
+          mkdir -p coverage
+          go test -v ./... -coverprofile=coverage.out
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          path: coverage.out
+          name: go-coverage.zip
+          overwrite: true
+
+      - name: Generate coverage report
+        uses: fgrosse/go-coverage-report@v1.3.0
+        with:
+          coverage-artifact-name: go-coverage.zip
+          coverage-file-name: coverage.out

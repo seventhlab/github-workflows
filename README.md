@@ -13,6 +13,7 @@ Only workflows with a `workflow_call` trigger are reusable from other repositori
 | --- | --- | --- | --- |
 | Pre-commit checks | `.github/workflows/pre-commit.yml` | `workflow_call` | Reusable lint/format gate with optional Node and Go setup |
 | Service tests | `.github/workflows/tests.yml` | `workflow_call` | Reusable CDK and Go test pipeline with Sonar scan |
+| Tests coverage | `.github/workflows/tests-coverage-report.yml` | `workflow_call` | Reusable CDK and Go coverage reporting for non-default branches |
 
 ## Repository-Internal Workflows
 
@@ -44,6 +45,7 @@ Reusable workflows in this repository are currently:
 
 - `.github/workflows/pre-commit.yml`
 - `.github/workflows/tests.yml`
+- `.github/workflows/tests-coverage-report.yml`
 
 ### Example with Inputs and Secrets
 
@@ -60,6 +62,27 @@ jobs:
       NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
+
+### Coverage Report Example
+
+```yaml
+jobs:
+  coverage:
+    uses: seventhlab/github-workflows/.github/workflows/tests-coverage-report.yml@v1
+    with:
+      report-cdk-tests-coverage: true
+      report-go-tests-coverage: true
+      node-version: 24
+      go-version: '1.26.1'
+      use-github-npm-registry: true
+      vitest-config-path: 'vitest.config.ts'
+      cdk-tests-env-vars: '{"ENV":"ci"}'
+      go-tests-env-vars: '{"GO_ENV":"ci"}'
+    secrets:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+Coverage comments are generated for pull requests and non-default branches. On `main`, the workflow exits early and does not publish coverage reports.
 
 ## Local Development
 
