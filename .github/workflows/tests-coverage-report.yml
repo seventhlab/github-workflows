@@ -62,6 +62,9 @@ on:
       NODE_AUTH_TOKEN:
         description: 'GitHub npm registry authentication token. Required if `use-github-npm-registry` is true.'
         required: false
+      GO_PRIVATE_TOKEN:
+        description: 'GitHub Go repository authentication token. Required if `use-github-go-repository` is true.'
+        required: false
 
 permissions:
   contents: read
@@ -102,6 +105,15 @@ jobs:
           use-github-npm-registry: ${{ inputs.use-github-npm-registry }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: Setup Go
+        uses: seventhlab/github-actions/actions/setup-go@v1.5.0
+        if: ${{ inputs.use-github-go-repository }}
+        with:
+          go-version: ${{ inputs.go-version }}
+          use-github-go-repository: ${{ inputs.use-github-go-repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GO_PRIVATE_TOKEN }}
 
       - name: Install dependencies
         run: |
