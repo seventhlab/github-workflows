@@ -34,6 +34,11 @@ on:
         type: boolean
         required: false
         default: true
+      use-github-go-repository:
+        description: 'Whether to use GitHub Go repository for private modules. Default is true.'
+        type: boolean
+        required: false
+        default: true
       vitest-config-path:
         description: 'Path to Vitest configuration file. Default is vitest.config.ts.'
         type: string
@@ -85,12 +90,12 @@ jobs:
     if: ${{ inputs.report-cdk-tests-coverage && github.ref_name != 'main' }}
     steps:
       - name: Checkout
-        uses: seventhlab/github-actions/actions/checkout@v1.4.0
+        uses: seventhlab/github-actions/actions/checkout@v1.5.0
         with:
           fetch-depth: 0
 
       - name: Setup node
-        uses: seventhlab/github-actions/actions/setup-node@v1.4.0
+        uses: seventhlab/github-actions/actions/setup-node@v1.5.0
         with:
           pnpm-version: ${{ inputs.pnpm-version }}
           node-version: ${{ inputs.node-version }}
@@ -103,7 +108,7 @@ jobs:
           pnpm install
 
       - name: Export CDK tests env vars
-        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.4.0
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.5.0
         with:
           env-vars-json: ${{ inputs.cdk-tests-env-vars }}
 
@@ -122,21 +127,24 @@ jobs:
     if: ${{ inputs.report-go-tests-coverage && github.ref_name != 'main' }}
     steps:
       - name: Checkout
-        uses: seventhlab/github-actions/actions/checkout@v1.4.0
+        uses: seventhlab/github-actions/actions/checkout@v1.5.0
         with:
           fetch-depth: 0
 
       - name: Setup Go
-        uses: seventhlab/github-actions/actions/setup-go@v1.4.0
+        uses: seventhlab/github-actions/actions/setup-go@v1.5.0
         with:
           go-version: ${{ inputs.go-version }}
+          use-github-go-repository: ${{ inputs.use-github-go-repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GO_PRIVATE_TOKEN }}
 
       - name: Install dependencies
         run: |
           go mod download
 
       - name: Export Go tests env vars
-        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.4.0
+        uses: seventhlab/github-actions/actions/export-dynamic-env-vars@v1.5.0
         with:
           env-vars-json: ${{ inputs.go-tests-env-vars }}
 

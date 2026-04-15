@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.SEVENTH_LAB_BOT_TOKEN }}
 
       - name: Setup node
-        uses: seventhlab/github-actions/actions/setup-node@v1.4.0
+        uses: seventhlab/github-actions/actions/setup-node@v1.5.0
 
       - name: Install dependencies
         run: pnpm install
