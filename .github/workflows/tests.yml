@@ -24,6 +24,11 @@ on:
         type: boolean
         required: false
         default: true
+      use-github-go-repository:
+        description: 'Whether to use GitHub Go repository for private modules. Default is true.'
+        type: boolean
+        required: false
+        default: true
       run-cdk-tests:
         description: 'Whether to run CDK tests. Default is true.'
         type: boolean
@@ -52,6 +57,9 @@ on:
       NODE_AUTH_TOKEN:
         description: 'GitHub npm registry authentication token. Required if `use-github-npm-registry` is true.'
         required: false
+      GO_PRIVATE_TOKEN:
+        description: 'GitHub Go repository authentication token. Required if `use-github-go-repository` is true.'
+        required: false
       SONAR_TOKEN:
         description: 'SonarQube authentication token. Required for SonarQube scan.'
         required: true
@@ -75,9 +83,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
       - name: Setup Go
-        uses: seventhlab/github-actions/actions/setup-go@v1.4.0
+        uses: seventhlab/github-actions/actions/setup-go@feat/go-private-support
         with:
           go-version: ${{ inputs.go-version }}
+          use-github-go-repository: ${{ inputs.use-github-go-repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GO_PRIVATE_TOKEN }}
 
       - name: Install dependencies
         run: |
