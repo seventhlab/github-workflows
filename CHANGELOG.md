@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/seventhlab/github-workflows/compare/v1.1.4...v1.2.0) (2026-04-15)
+
+### ✨ Features
+
+* add tests coverage reports reusable workflow ([#8](https://github.com/seventhlab/github-workflows/issues/8)) ([f52c0ab](https://github.com/seventhlab/github-workflows/commit/f52c0abb43cc8fdc7a8aeb4d758eeb7fc9dd36b8))
+
 ## [1.1.4](https://github.com/seventhlab/github-workflows/compare/v1.1.3...v1.1.4) (2026-04-10)
 
 ### 🐛 Bug Fixes
