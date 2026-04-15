@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0](https://github.com/seventhlab/github-workflows/compare/v1.2.0...v1.3.0) (2026-04-15)
+
+### ✨ Features
+
+* add go private support ([#9](https://github.com/seventhlab/github-workflows/issues/9)) ([132a07a](https://github.com/seventhlab/github-workflows/commit/132a07acc8ef526c2936fcf9d07a2a12efab5cea))
+
 ## [1.2.0](https://github.com/seventhlab/github-workflows/compare/v1.1.4...v1.2.0) (2026-04-15)
 
 ### ✨ Features
