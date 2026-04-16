@@ -152,6 +152,7 @@ jobs:
     runs-on: ubuntu-latest
     name: "Sonar"
     needs: [cdk-tests, go-tests]
+    if: always()
     steps:
       - name: Checkout
         uses: seventhlab/github-actions/actions/checkout@v1.5.0
