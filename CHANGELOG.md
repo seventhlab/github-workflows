@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2](https://github.com/seventhlab/github-workflows/compare/v1.3.1...v1.3.2) (2026-04-16)
+
+### 🐛 Bug Fixes
+
+* run sonar job even if one of the others is skipped ([#11](https://github.com/seventhlab/github-workflows/issues/11)) ([a5fcdf5](https://github.com/seventhlab/github-workflows/commit/a5fcdf5fd86ba04414542bcddd03376ff21ecf55))
+
 ## [1.3.1](https://github.com/seventhlab/github-workflows/compare/v1.3.0...v1.3.1) (2026-04-15)
 
 ### 🐛 Bug Fixes
