@@ -173,7 +173,7 @@ jobs:
           overwrite: true
 
       - name: Generate coverage report
-        uses: fgrosse/go-coverage-report@v1.3.0
+        uses: fgrosse/go-coverage-report@v1.3.1
         with:
           coverage-artifact-name: go-coverage.zip
           coverage-file-name: coverage.out
